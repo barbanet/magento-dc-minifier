@@ -10,14 +10,21 @@
  *
  * @category   Dc
  * @package    Dc_Minifier
- * @copyright  Copyright (c) 2014 Damián Culotta. (http://www.damianculotta.com.ar/)
+ * @copyright  Copyright (c) 2014-2015 Damián Culotta. (http://www.damianculotta.com.ar/)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 class Dc_Minifier_Helper_Data extends Mage_Core_Helper_Data
 {
-    
-    private function _compressCss($buffer) {
+
+    /**
+     * Minify css code.
+     *
+     * @param $buffer
+     * @return mixed
+     */
+    private function compressCss($buffer)
+    {
         if (Mage::app()->getStore()->getConfig('minifier/settings/css')) {
             $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
             $buffer = str_replace(array("\r\n","\r","\n","\t",'  ','    ','     '), '', $buffer);
@@ -27,8 +34,15 @@ class Dc_Minifier_Helper_Data extends Mage_Core_Helper_Data
         }
         return $buffer;
     }
-    
-    private function _compressJs($buffer) {
+
+    /**
+     * Minify js code.
+     *
+     * @param $buffer
+     * @return string
+     */
+    private function compressJs($buffer)
+    {
         if (Mage::app()->getStore()->getConfig('minifier/settings/js')) {
             $jsmin = new Dc_Minifier_JSMin($buffer);
             $buffer = $jsmin->min(); 
@@ -108,10 +122,10 @@ class Dc_Minifier_Helper_Data extends Mage_Core_Helper_Data
                     }
                     switch(strtolower(pathinfo($file, PATHINFO_EXTENSION))) {
                         case 'css':
-                            $contents = $this->_compressCss(file_get_contents($file)) . "\n";
+                            $contents = $this->compressCss(file_get_contents($file)) . "\n";
                             break;
                         case 'js':
-                            $contents = $this->_compressJs(file_get_contents($file)) . "\n";
+                            $contents = $this->compressJs(file_get_contents($file)) . "\n";
                             break;
                         default:
                             $contents = file_get_contents($file) . "\n";
