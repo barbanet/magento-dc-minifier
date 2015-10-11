@@ -18,7 +18,7 @@
 <config>
     <modules>
         <Dc_Minifier>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </Dc_Minifier>
     </modules>
     <adminhtml>
